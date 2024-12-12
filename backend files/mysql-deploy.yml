@@ -18,22 +18,18 @@ spec:
         tier: mysql
     spec:
       containers:
-      - image: mysql:8.0
-        name: mysql
+      - image: mongo
+        name: mongo
         env:
-        - name: MYSQL_ROOT_PASSWORD
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-pass
-              key: password
-        - name: MYSQL_DATABASE
-          value: wordpress
-        - name: MYSQL_USER
-          value: afroz
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-pass
+              name: my-secret
               key: password
         ports:
         - containerPort: 3306

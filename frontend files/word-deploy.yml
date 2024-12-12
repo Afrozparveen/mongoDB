@@ -18,18 +18,31 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: wordpress:6.2.1-apache
-        name: wordpress
+      - image: mongo-express
+        name: mongo-express
         env:
-        - name: WORDPRESS_DB_HOST
+        - name: ME_CONFIG_MONGODB_SERVER
           value: wordpress-mysql
-        - name: WORDPRESS_DB_PASSWORD
+        - name: ME_CONFIG_BASICAUTH_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: username  
+        - name: ME_CONFIG_BASICAUTH_PASSWORD 
           valueFrom:
             secretKeyRef:
               name: mysql-pass
               key: password
-        - name: WORDPRESS_DB_USER
-          value: wordpress
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: password     
         ports:
         - containerPort: 80
           name: wordpress
