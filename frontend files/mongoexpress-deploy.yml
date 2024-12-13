@@ -52,4 +52,4 @@ spec:
       volumes:
       - name: mongoexpress-persistent-storage
         persistentVolumeClaim:
-          claimName: mongo-pv-claim
+          claimName: mongoexpress-pv-claim
