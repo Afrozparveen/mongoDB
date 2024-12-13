@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: mongoexpress
   labels:
-    app: wordpress
+    app: mongo
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: mongo
       tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: mongo
         tier: frontend
     spec:
       containers:
@@ -22,7 +22,7 @@ spec:
         name: mongo-express
         env:
         - name: ME_CONFIG_MONGODB_SERVER
-          value: wordpress-mysql
+          value: mongodb
         - name: ME_CONFIG_BASICAUTH_USERNAME
           valueFrom:
             configMapKeyRef:
@@ -31,7 +31,7 @@ spec:
         - name: ME_CONFIG_BASICAUTH_PASSWORD 
           valueFrom:
             secretKeyRef:
-              name: mysql-pass
+              name: my-secret
               key: password
         - name: ME_CONFIG_MONGODB_ADMINUSERNAME
           valueFrom:
@@ -44,12 +44,12 @@ spec:
               name: my-secret
               key: password     
         ports:
-        - containerPort: 80
-          name: wordpress
+        - containerPort: 8081
+          name: mongoexpress
         volumeMounts:
-        - name: wordpress-persistent-storage
+        - name: mongoexpress-persistent-storage
           mountPath: /var/www/html
       volumes:
-      - name: wordpress-persistent-storage
+      - name: mongoexpress-persistent-storage
         persistentVolumeClaim:
-          claimName: wp-pv-claim
+          claimName: mongo-pv-claim
